@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# Header logging.
+function e_header() {
+    printf "$(tput setaf 5)%s$(tput sgr0)\n" "$@"
+}
+
+# Success logging.
+function e_success() {
+    printf "$(tput setaf 2)✔ %s$(tput sgr0)\n" "$@"
+}
+
+# Info logging.
+function e_info() {
+    printf "$(tput setaf 6)%s$(tput sgr0)\n" "$@"
+}
+
+# Initialize the git repository if it's missing.
+if [ ! -d .git ]; then
+
+    # Fetch the repo.
+    e_header "Fetching repo..."
+    git clone https://github.com/whitneyit/ssh.git temp
+
+    # Info the user where the repo is located.
+    e_info "Repo located at: \"$PWD\""
+
+    # Do some fancy footwork to move the repo into this given directory. This
+    # works even if the directory is not empty, so a point of caution there...
+    mv temp/.git ./.git
+    rm -rf temp
+
+    # Now we restore the repo.
+    git reset --hard
+
+    # And remove old files.
+    git clean -dfx
+
+    # Now we modify the origin url to use our `ssh` address. We do this so that
+    # when we modify the repo we don't have to worry about passwords.
+    e_info "Updating origin url..."
+    git remote set-url origin git@github.com:whitneyit/ssh.git
+fi
+
+# If the `~/.ssh` folder doesn't already exist, create it now.
+if [ ! -d ~/.ssh ]; then
+    mkdir ~/.ssh
+fi
+
+# Copy over our config file.
+cp config ~/.ssh/config
+
+# When running in `cygwin`, change the group of the `~/.ssh` folder.
+if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+    chgrp -R Users ~/.ssh
+    chgrp -R Users ~/.ssh/config
+fi
+
+# Set the permissions correctly.
+chmod 700 ~/.ssh
+chmod 755 ~/.ssh/config
+
+# And finally that's it. Repo updated!
+e_success "SSH update complete"
+exit
+
+# vim: set syn=sh :

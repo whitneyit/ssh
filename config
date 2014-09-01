@@ -1,0 +1,42 @@
+# Defaults
+Host *
+    ForwardAgent yes
+    ForwardX11 no
+    ForwardX11Trusted no
+    port 22
+    protocol 2
+    PreferredAuthentications publickey
+    PubKeyAuthentication yes
+    ServerAliveCountMax 30
+    ServerAliveInterval 60
+
+# BitBucket
+Host bitbucket
+    HostName bitbucket.org
+    User git
+    IdentityFile ~/.ssh/james@whitney.io
+
+# Forge
+Host forge
+    HostName 128.199.239.247
+    User forge
+    IdentityFile ~/.ssh/james@whitney.io
+
+# GitHub
+Host github
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/james@whitney.io
+
+# Homestead
+Host homestead
+    HostName 192.168.99.10
+    User vagrant
+    Port 2222
+    IdentityFile ~/.vagrant.d/insecure_private_key
+
+# Whitney IT
+Host whitneyit
+    HostName 173.254.28.72
+    User whitney4
+    IdentityFile ~/.ssh/james@whitney.io
