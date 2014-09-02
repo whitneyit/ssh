@@ -32,7 +32,7 @@ Host github
 Host homestead
     HostName 192.168.99.10
     User vagrant
-    Port 2222
+    Port 2000
     IdentityFile ~/.vagrant.d/insecure_private_key
 
 # Whitney IT
