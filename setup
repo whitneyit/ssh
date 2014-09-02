@@ -50,12 +50,28 @@ fi
 # Copy over our config file.
 cp config ~/.ssh/config
 
+# Ensure that we have a folder for our soon to be created `ssh-setup` file.
+if [ ! -d /usr/local/bin ]; then
+    mkdir -p /usr/local/bin
+fi
+
+# Here we create a add a method to the users `bin` folder that will be able to
+# automaically call this `setup` file from any directory on the OS. To use the
+# snippet simply run `$ ssh-setup`.
+if [ ! -f /usr/local/bin/ssh-setup ]; then
+    echo '#!/usr/bin/env bash' > /usr/local/bin/ssh-setup
+    echo "bash $PWD/setup"    >> /usr/local/bin/ssh-setup
+fi
+
 # When running in `cygwin`, change the group of the `~/.ssh` folder.
 if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
 
     # More information on why you need to change the group can be found here:
     # http://superuser.com/questions/397288
     chgrp -R Users ~/.ssh
+
+    # Ensure that our `ssh-setup` script has the correct group as well.
+    chgrp -R Users /usr/local/bin/ssh-setup
 
     # If we are using vagrant, make sure we also change the group for vagrants
     # main ssh key.
@@ -68,6 +84,9 @@ fi
 # Set the permissions correctly. Folders need to be 700 and files 600.
 chmod 700 ~/.ssh
 chmod 755 ~/.ssh/config
+
+# Allow anyone to modify our `ssh-setup` script.
+chmod 755 /usr/local/bin/ssh-setup
 
 # And again, if we are using vagrant, adjust the permissons.
 if [ -f ~/.vagrant.d/insecure_private_key ]; then
