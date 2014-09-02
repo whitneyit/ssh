@@ -52,16 +52,30 @@ cp config ~/.ssh/config
 
 # When running in `cygwin`, change the group of the `~/.ssh` folder.
 if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+
+    # More information on why you need to change the group can be found here:
+    # http://superuser.com/questions/397288
     chgrp -R Users ~/.ssh
-    chgrp -R Users ~/.ssh/config
+
+    # If we are using vagrant, make sure we also change the group for vagrants
+    # main ssh key.
+    if [ -f ~/.vagrant.d/insecure_private_key ]; then
+        chgrp Users ~/.vagrant.d/insecure_private_key
+    fi
+
 fi
 
-# Set the permissions correctly.
+# Set the permissions correctly. Folders need to be 700 and files 600.
 chmod 700 ~/.ssh
 chmod 755 ~/.ssh/config
 
+# And again, if we are using vagrant, adjust the permissons.
+if [ -f ~/.vagrant.d/insecure_private_key ]; then
+    chmod 600 ~/.vagrant.d/insecure_private_key
+fi
+
 # And finally that's it. Repo updated!
-e_success "SSH update complete"
+e_success "SSH setup complete"
 exit
 
 # vim: set syn=sh :

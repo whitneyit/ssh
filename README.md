@@ -9,6 +9,9 @@ current working directory and then copy accross my ssh [config](https://github.c
 file into the `~/.ssh` folder, creating it if it does not already exist. Next it
 will set the permission of the folder accordinly.
 
+Also, if you have [vagrant](https://www.vagrantup.com) installed, it will set
+the permissions of the `insecure_private_key` that ships with vagrant.
+
 So to begin, execute the code below.
 
 ```bash
