@@ -19,7 +19,7 @@ the permissions of the `insecure_private_key` that ships with vagrant.
 
 So to begin, execute the code below.
 
-```bash
+```sh
 $ bash -c "$(curl -fsSL https://raw.github.com/whitneyit/ssh/master/setup)"
 ```
 
@@ -36,7 +36,7 @@ here.
 
 To create a new key, you can use the code snippet below.
 
-```bash
+```sh
 $ ssh-keygen -t rsa -C "your_email@example.com"
 ```
 
@@ -54,13 +54,13 @@ you can just leave it blank.
 Should you be using [cygwin](https://www.cygwin.com/), ensure that you set the
 user group of the key correctly. The code below will achieve that for you.
 
-```bash
+```sh
 $ chgrp Users ~/.ssh/your_email@example.com
 ```
 
 Next ensure that you set the permissions of the key correctly:
 
-```bash
+```sh
 $ chmod 600 ~/.ssh/your_email@example.com
 ```
 
@@ -70,7 +70,7 @@ new ssh key(s) habe been **added** to the `ssh-agent`.
 
 To achieve that, execute the following;
 
-```bash
+```sh
 $ eval "$(ssh-agent)"
 $ eval ssh-add "~/.ssh/your_email@example.com"
 ```
