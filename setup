@@ -20,6 +20,13 @@ function e_success() {
     printf "$(tput setaf 2)✔ %s$(tput sgr0)\n" "$@"
 }
 
+# If we are trying to clone the repo into the $HOME directory, clone it into
+# `~/ssh` instead.
+if [ "$PWD" == "$HOME" ]; then
+    mkdir "$HOME/ssh"
+    cd $HOME/ssh
+fi
+
 # Initialize the git repository if it's missing.
 if [ ! -d .git ]; then
 
@@ -92,7 +99,7 @@ if [ -f $HOME/.ssh/config ]; then
     mv $HOME/.ssh/config "$BACKUP_DIRECTORY"
 
     # Inform the user that we are backing up the `config` file.
-    e_info "Backed up \"~/.ssh/config\" to \"~/.ssh/backups/$TIMESTAMP_DIRECTORY\"/config"
+    e_info "Backed up \"~/.ssh/config\" to \"~/.ssh/backups/$TIMESTAMP_DIRECTORY/config\""
 
 fi
 

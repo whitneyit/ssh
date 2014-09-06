@@ -10,14 +10,31 @@ file into the `~/.ssh` folder, creating it if it does not already exist. Next it
 will set the permission of the folder accordinly.
 
 Once that is complete it will add a file to `/usr/local/bin` called
-`ssh-config`. This file allows you to run the `setup` from anywhere within the
-OS so long as the `/usr/local/bin` folder has been added to your path. If the
-folder cannot be found one will be created for you.
+`ssh-setup`. This file allows you to execute the `setup` file from anywhere
+within the OS so long as the `/usr/local/bin` folder has been added to your
+path. If the folder cannot be found one will be created for you.
 
 Also, if you have [vagrant](https://www.vagrantup.com) installed, it will set
 the permissions of the `insecure_private_key` that ships with vagrant.
 
-So to begin, execute the code below.
+So to begin, navigate to the folder where you want the git repo cloned to then
+execute the bash script below. For example,
+
+```sh
+$ mkdir -p $HOME/Code/ssh
+$ cd ~/Code/ssh
+```
+
+This would mean that the repo will be checked out into your `~/Code/ssh` folder.
+If you have some folder where you put all of your git repos, then that would be
+a perfect fit for this.
+
+If you don't end up navigating to a specific folder and just end up cloning the
+repo out of your `$HOME` folder, the repo will instead be cloned into a new
+folder located at `$HOME/ssh`.
+
+So, once you are in the desired folder to store this code, run the bash script
+below.
 
 ```sh
 $ bash -c "$(curl -fsSL https://raw.github.com/whitneyit/ssh/master/setup)"
