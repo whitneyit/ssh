@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 
+# Error logging.
+function e_error() {
+    printf "$(tput setaf 1)✘ %s$(tput sgr0)\n" "$@"
+}
+
 # Header logging.
 function e_header() {
     printf "$(tput setaf 5)%s$(tput sgr0)\n" "$@"
 }
 
-# Success logging.
-function e_success() {
-    printf "$(tput setaf 2)✔ %s$(tput sgr0)\n" "$@"
-}
-
 # Info logging.
 function e_info() {
     printf "$(tput setaf 6)%s$(tput sgr0)\n" "$@"
+}
+
+# Success logging.
+function e_success() {
+    printf "$(tput setaf 2)✔ %s$(tput sgr0)\n" "$@"
 }
 
 # Initialize the git repository if it's missing.
@@ -40,61 +45,124 @@ if [ ! -d .git ]; then
     # when we modify the repo we don't have to worry about passwords.
     e_info "Updating origin url..."
     git remote set-url origin git@github.com:whitneyit/ssh.git
+
 fi
 
 # If the `~/.ssh` folder doesn't already exist, create it now.
-if [ ! -d ~/.ssh ]; then
-    mkdir ~/.ssh
+if [ ! -d $HOME/.ssh ]; then
+    mkdir $HOME/.ssh
 fi
 
-# Copy over our config file.
-cp config ~/.ssh/config
+# Open up the `~/.ssh` folder for editing. We do this outside of the check
+# above so that even when the directory does exist, we will reset the folders
+# permissions and ensure that we can edit the contents.
+chmod 755 $HOME/.ssh
+
+# If a previous `~/.ssh/config` file exists, back it up now.
+if [ -f $HOME/.ssh/config ]; then
+
+    # Define our directories to work with
+    TIMESTAMP_DIRECTORY="$(date +%Y-%m-%d_%H-%M-%S)"
+    BACKUP_DIRECTORY="$HOME/.ssh/backups/$TIMESTAMP_DIRECTORY"
+
+    # If the user is spamming this command more than once per second, we should
+    # just bail now. What this is actually saying is if the directory already
+    # exists, (defined down to the second), when then just kill the shell.
+    if [ -d "$BACKUP_DIRECTORY" ]; then
+        exit 0
+    fi
+
+    # Create the timestamped backup directory.
+    mkdir -p "$BACKUP_DIRECTORY"
+
+    # Test to make sure that our directory was created
+    if [ ! -d "$BACKUP_DIRECTORY" ]; then
+        e_error "Unable to create \"Backup directory\": $BACKUP_DIRECTORY.  Aborting"
+        exit 0
+    fi
+
+    # Backup the file.
+    mv $HOME/.ssh/config "$BACKUP_DIRECTORY"
+
+    # Inform the user that we are backing up the `config` file.
+    e_info "Backed up \"~/.ssh/config\" to \"~/.ssh/backups/$TIMESTAMP_DIRECTORY\"/config"
+
+fi
+
+# Copy over the new `config` file and set its permissions.
+cp config $HOME/.ssh/config
+chmod 755 $HOME/.ssh/config
+
+# If no known hosts file exists, create it now.
+if [ ! -f $HOME/.ssh/known_hosts ]; then
+    touch $HOME/.ssh/known_hosts
+    chmod 755 $HOME/.ssh/known_hosts
+fi
+
+# When running in `cygwin`, change the group of the `~/.ssh` folder and all of
+# its children folders and files. More information on why you need to change the
+# group can be found here:
+# http://superuser.com/questions/397288
+if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+    chgrp -R Users $HOME/.ssh
+elif [ -d /home/vagrant ]; then
+    chown -R vagrant:vagrant $HOME/.ssh
+fi
+
+# If we are using vagrant change the group for vagrant's main ssh key.
+if [ -f $HOME/.vagrant.d/insecure_private_key ]; then
+    chgrp Users $HOME/.vagrant.d/insecure_private_key
+    chmod 600 $HOME/.vagrant.d/insecure_private_key
+fi
 
 # Ensure that we have a folder for our soon to be created `ssh-setup` file.
 if [ ! -d /usr/local/bin ]; then
-    mkdir -p /usr/local/bin
+
+    # User sudo if it is available.
+    if [ "$(type -P sudo)" ]; then
+        sudo mkdir -p /usr/local/bin
+    else
+        mkdir -p /usr/local/bin
+    fi
+
 fi
+
+# Set the ownership of `/usr/local/bin` correctly.
+if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+    chgrp Users /usr/local/bin
+elif [ -d /home/vagrant ]; then
+    sudo chown vagrant:vagrant /usr/local/bin
+fi
+
+# Reset the folders permissions.
+chmod 755 /usr/local/bin
 
 # Here we create a add a method to the users `bin` folder that will be able to
 # automaically call this `setup` file from any directory on the OS. To use the
 # snippet simply run `$ ssh-setup`.
 if [ ! -f /usr/local/bin/ssh-setup ]; then
-    echo '#!/usr/bin/env bash' > /usr/local/bin/ssh-setup
-    echo "bash $PWD/setup"    >> /usr/local/bin/ssh-setup
+    echo "#!/usr/bin/env bash" > /usr/local/bin/ssh-setup
+    echo "cd $PWD"            >> /usr/local/bin/ssh-setup
+    echo "bash setup"         >> /usr/local/bin/ssh-setup
 fi
 
-# When running in `cygwin`, change the group of the `~/.ssh` folder.
+# Ensure that our `ssh-setup` script has the correct group as well.
 if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-
-    # More information on why you need to change the group can be found here:
-    # http://superuser.com/questions/397288
-    chgrp -R Users ~/.ssh
-
-    # Ensure that our `ssh-setup` script has the correct group as well.
-    chgrp -R Users /usr/local/bin/ssh-setup
-
-    # If we are using vagrant, make sure we also change the group for vagrants
-    # main ssh key.
-    if [ -f ~/.vagrant.d/insecure_private_key ]; then
-        chgrp Users ~/.vagrant.d/insecure_private_key
-    fi
-
+    chgrp Users /usr/local/bin/ssh-setup
+elif [ -d /home/vagrant ]; then
+    sudo chown vagrant:vagrant /usr/local/bin/ssh-setup
 fi
 
-# Set the permissions correctly. Folders need to be 700 and files 600.
-chmod 700 ~/.ssh
-chmod 755 ~/.ssh/config
-
-# Allow anyone to modify our `ssh-setup` script.
+# And set its permissions.
 chmod 755 /usr/local/bin/ssh-setup
 
-# And again, if we are using vagrant, adjust the permissons.
-if [ -f ~/.vagrant.d/insecure_private_key ]; then
-    chmod 600 ~/.vagrant.d/insecure_private_key
-fi
+# With everything now complete, we can "close" the `~/.ssh` folder. The `~/.ssh`
+# folder needs to be 700 and any ssh keys as well as the config file must, be
+# set to 600.
+chmod 700 $HOME/.ssh
+chmod 600 $HOME/.ssh/config
 
 # And finally that's it. Repo updated!
 e_success "SSH setup complete"
-exit
 
 # vim: set syn=sh :
