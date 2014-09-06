@@ -96,8 +96,10 @@ chmod 755 $HOME/.ssh/config
 # If no known hosts file exists, create it now.
 if [ ! -f $HOME/.ssh/known_hosts ]; then
     touch $HOME/.ssh/known_hosts
-    chmod 755 $HOME/.ssh/known_hosts
 fi
+
+# Update the `known_hosts` file permissions.
+chmod 755 $HOME/.ssh/known_hosts
 
 # When running in `cygwin`, change the group of the `~/.ssh` folder and all of
 # its children folders and files. More information on why you need to change the
