@@ -48,17 +48,20 @@ if [ ! -d .git ]; then
     # And remove old files.
     git clean -dfx
 
-    # Set the ownership of this repo correctly.
-    if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-        chgrp -R Users $PWD
-    elif [ -d /home/vagrant ]; then
-        chown -R vagrant:vagrant $PWD
-    fi
-
     # Now we modify the origin url to use our `ssh` address. We do this so that
     # when we modify the repo we don't have to worry about passwords.
     e_info "Updating origin url..."
     git remote set-url origin git@github.com:whitneyit/ssh.git
+
+    # If we are running inside a `cygwin` environment, we need to change the
+    # "group" on the files so that we can change the permissions of the files.
+    if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+        chgrp -R Users $PWD
+
+    # And here we do the same for a `vagrant` environment.
+    elif [ -d /home/vagrant ]; then
+        chown -R vagrant:vagrant $PWD
+    fi
 
 fi
 
