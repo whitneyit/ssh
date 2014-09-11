@@ -106,17 +106,21 @@ if [ -f $HOME/.ssh/config ]; then
 
 fi
 
-# Copy over the new `config` file and set its permissions.
-cp config $HOME/.ssh/config
-chmod 755 $HOME/.ssh/config
+# If we are missing a `authorized_keys` file, create one now.
+if [ ! -f $HOME/.ssh/authorized_keys ]; then
+    touch $HOME/.ssh/authorized_keys
+fi
+chmod 755 $HOME/.ssh/authorized_keys
 
-# If no known hosts file exists, create it now.
+# Same goes with `hosts_file` file.
 if [ ! -f $HOME/.ssh/known_hosts ]; then
     touch $HOME/.ssh/known_hosts
 fi
-
-# Update the `known_hosts` file permissions.
 chmod 755 $HOME/.ssh/known_hosts
+
+# Copy over the new `config` file and set its permissions.
+cp config $HOME/.ssh/config
+chmod 755 $HOME/.ssh/config
 
 # When running in `cygwin`, change the group of the `~/.ssh` folder and all of
 # its children folders and files. More information on why you need to change the
