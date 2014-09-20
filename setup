@@ -121,10 +121,12 @@ for line in $KEYS;  do
         # If we are running inside a cygwin box, we need to set the group.
         if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
             chgrp Users "$HOME/.ssh/$key"
+            chgrp Users "$HOME/.ssh/$key.pub"
         fi
 
         # Set the permissions of the key.
         chmod 600 "$HOME/.ssh/$key"
+        chmod 600 "$HOME/.ssh/$key.pub"
 
     # If the $key doesn't exist.
     else
