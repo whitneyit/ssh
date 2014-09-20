@@ -137,6 +137,9 @@ for line in $KEYS;  do
 
     fi
 
+    # Add the key to the `ssh-agent`
+    eval ssh-add "$HOME/.ssh/$key"
+
 done
 
 # If we are missing a `authorized_keys` file, create one now.
