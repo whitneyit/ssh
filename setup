@@ -116,19 +116,23 @@ for line in $KEYS;  do
     key=$(eval echo "$line")
 
     # See if the key exists
-    if [ -f "$key" ]; then
+    if [ -f "$HOME/.ssh/$key" ]; then
 
         # If we are running inside a cygwin box, we need to set the group.
         if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-            chgrp Users "$key"
+            chgrp Users "$HOME/.ssh/$key"
         fi
 
         # Set the permissions of the key.
-        chmod 600 "$key"
+        chmod 600 "$HOME/.ssh/$key"
 
     # If the $key doesn't exist.
     else
-        e_error "ssh key \"$key\" not found."
+
+        # Generate the key.
+        ssh-keygen -t rsa -C "$key" -f "$HOME/.ssh/$key" -N ""
+        e_info "Created key: $key at $HOME/.ssh/$key"
+
     fi
 
 done
