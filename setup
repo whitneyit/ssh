@@ -27,6 +27,9 @@ if [ "$PWD" == "$HOME" ]; then
     cd $HOME/ssh
 fi
 
+# Read the keys.
+KEYS="$(cat "keys")"
+
 # Initialize the git repository if it's missing.
 if [ ! -d .git ]; then
 
@@ -105,6 +108,30 @@ if [ -f $HOME/.ssh/config ]; then
     e_info "Backed up \"~/.ssh/config\" to \"~/.ssh/backups/$TIMESTAMP_DIRECTORY/config\""
 
 fi
+
+# Here we loop over each line in the file
+for line in $KEYS;  do
+
+    # Here we convert the line of the file into a real variable
+    key=$(eval echo "$line")
+
+    # See if the key exists
+    if [ -f "$key" ]; then
+
+        # If we are running inside a cygwin box, we need to set the group.
+        if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+            chgrp Users "$key"
+        fi
+
+        # Set the permissions of the key.
+        chmod 600 "$key"
+
+    # If the $key doesn't exist.
+    else
+        e_error "ssh key \"$key\" not found."
+    fi
+
+done
 
 # If we are missing a `authorized_keys` file, create one now.
 if [ ! -f $HOME/.ssh/authorized_keys ]; then
