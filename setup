@@ -27,9 +27,6 @@ if [ "$PWD" == "$HOME" ]; then
     cd $HOME/ssh
 fi
 
-# Read the keys.
-KEYS="$(cat "keys")"
-
 # Initialize the git repository if it's missing.
 if [ ! -d .git ]; then
 
@@ -108,6 +105,9 @@ if [ -f $HOME/.ssh/config ]; then
     e_info "Backed up \"~/.ssh/config\" to \"~/.ssh/backups/$TIMESTAMP_DIRECTORY/config\""
 
 fi
+
+# Read the keys.
+KEYS="$(cat "keys")"
 
 # Here we loop over each line in the file
 for line in $KEYS;  do
