@@ -3,8 +3,8 @@ Host *
     ForwardAgent yes
     ForwardX11 no
     ForwardX11Trusted no
-    port 22
-    protocol 2
+    Port 22
+    Protocol 2
     PreferredAuthentications publickey
     PubKeyAuthentication yes
     ServerAliveCountMax 30
@@ -40,3 +40,5 @@ Host whitneyit
     HostName 173.254.28.72
     User whitney4
     IdentityFile ~/.ssh/james@whitney.io
+
+# vim set ft=sshconfig
