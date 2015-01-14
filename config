@@ -31,6 +31,14 @@ Host github.com
     User git
     IdentityFile ~/.ssh/james@whitney.io
 
+# Host github.com
+#     ForwardAgent yes
+#     HostName ssh.github.com
+#     User git
+#     Port 443
+#     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
+#     IdentityFile ~/.ssh/james@whitney.io
+
 ###########################################################
 #                                                         #
 #                         ALIASES                         #
