@@ -1,6 +1,5 @@
 # Defaults
 Host *
-    ForwardAgent yes
     ForwardX11 no
     ForwardX11Trusted no
     port 22
@@ -12,24 +11,28 @@ Host *
 
 # BitBucket
 Host bitbucket
+    ForwardAgent yes
     HostName bitbucket.org
     User git
     IdentityFile ~/.ssh/james@whitney.io
 
 # Forge
 Host forge
+    ForwardAgent yes
     HostName 128.199.239.247
     User forge
     IdentityFile ~/.ssh/james@whitney.io
 
 # GitHub
 Host github
+    ForwardAgent yes
     HostName github.com
     User git
     IdentityFile ~/.ssh/james@whitney.io
 
 # Homestead
 Host homestead
+    ForwardAgent yes
     HostName 192.168.99.10
     User vagrant
     Port 2000
@@ -37,6 +40,9 @@ Host homestead
 
 # Whitney IT
 Host whitneyit
+    ForwardAgent yes
     HostName 173.254.28.72
     User whitney4
     IdentityFile ~/.ssh/james@whitney.io
+
+# vim: set syn=sshconfig :
