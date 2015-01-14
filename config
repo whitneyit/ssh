@@ -7,7 +7,6 @@
 Host *
     ForwardX11 no
     ForwardX11Trusted no
-    Port 22
     PreferredAuthentications publickey
     Protocol 2
     PubKeyAuthentication yes
