@@ -124,18 +124,18 @@ for line in $KEYS;  do
             chgrp Users "$HOME/.ssh/$key.pub"
         fi
 
-        # Set the permissions of the key.
-        chmod 600 "$HOME/.ssh/$key"
-        chmod 600 "$HOME/.ssh/$key.pub"
-
     # If the $key doesn't exist.
     else
 
-        # Generate the key.
+        # Generate a new key.
         ssh-keygen -t rsa -C "$key" -f "$HOME/.ssh/$key" -N ""
         e_info "Created key: $key at $HOME/.ssh/$key"
 
     fi
+
+    # Set the permissions of the key.
+    chmod 600 "$HOME/.ssh/$key"
+    chmod 600 "$HOME/.ssh/$key.pub"
 
     # Add the key to the `ssh-agent`
     eval ssh-add "$HOME/.ssh/$key"
