@@ -38,11 +38,4 @@ Host homestead
     Port 2000
     IdentityFile ~/.vagrant.d/insecure_private_key
 
-# Whitney IT
-Host whitneyit
-    ForwardAgent yes
-    HostName 173.254.28.72
-    User whitney4
-    IdentityFile ~/.ssh/james@whitney.io
-
 # vim: set syn=sshconfig :
