@@ -1,36 +1,49 @@
-# Defaults
+###########################################################
+#                                                         #
+#                        DEFAULTS                         #
+#                                                         #
+###########################################################
+
 Host *
     ForwardX11 no
     ForwardX11Trusted no
-    port 22
-    protocol 2
+    Port 22
     PreferredAuthentications publickey
+    Protocol 2
     PubKeyAuthentication yes
     ServerAliveCountMax 30
     ServerAliveInterval 60
 
-# BitBucket
-Host bitbucket
+###########################################################
+#                                                         #
+#                       KNOWN HOSTS                       #
+#                                                         #
+###########################################################
+
+Host bitbucket.org
     ForwardAgent yes
     HostName bitbucket.org
     User git
     IdentityFile ~/.ssh/james@whitney.io
 
-# Forge
+Host github.com
+    ForwardAgent yes
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/james@whitney.io
+
+###########################################################
+#                                                         #
+#                         ALIASES                         #
+#                                                         #
+###########################################################
+
 Host forge
     ForwardAgent yes
     HostName 128.199.239.247
     User forge
     IdentityFile ~/.ssh/james@whitney.io
 
-# GitHub
-Host github
-    ForwardAgent yes
-    HostName github.com
-    User git
-    IdentityFile ~/.ssh/james@whitney.io
-
-# Homestead
 Host homestead
     ForwardAgent yes
     HostName 192.168.99.10
