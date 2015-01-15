@@ -22,6 +22,7 @@ Host bitbucket.org
     ForwardAgent yes
     HostName bitbucket.org
     IdentityFile ~/.ssh/james@whitney.io
+    Port 22
     PreferredAuthentications publickey
     User git
 
@@ -29,6 +30,7 @@ Host github.com
     ForwardAgent yes
     HostName github.com
     IdentityFile ~/.ssh/james@whitney.io
+    Port 22
     PreferredAuthentications publickey
     User git
 
@@ -51,6 +53,7 @@ Host forge
     ForwardAgent yes
     HostName 128.199.239.247
     IdentityFile ~/.ssh/james@whitney.io
+    Port 22
     PreferredAuthentications publickey
     User forge
 
