@@ -7,7 +7,6 @@
 Host *
     ForwardX11 no
     ForwardX11Trusted no
-    PreferredAuthentications publickey
     Protocol 2
     PubKeyAuthentication yes
     ServerAliveCountMax 30
@@ -24,12 +23,14 @@ Host bitbucket.org
     HostName bitbucket.org
     User git
     IdentityFile ~/.ssh/james@whitney.io
+    PreferredAuthentications publickey
 
 Host github.com
     ForwardAgent yes
     HostName github.com
     User git
     IdentityFile ~/.ssh/james@whitney.io
+    PreferredAuthentications publickey
 
 # Host github.com
 #     ForwardAgent yes
@@ -38,6 +39,7 @@ Host github.com
 #     Port 443
 #     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
 #     IdentityFile ~/.ssh/james@whitney.io
+#     PreferredAuthentications publickey
 
 ###########################################################
 #                                                         #
@@ -50,6 +52,7 @@ Host forge
     HostName 128.199.239.247
     User forge
     IdentityFile ~/.ssh/james@whitney.io
+    PreferredAuthentications publickey
 
 Host homestead
     ForwardAgent yes
@@ -57,5 +60,6 @@ Host homestead
     User vagrant
     Port 2000
     IdentityFile ~/.vagrant.d/insecure_private_key
+    PreferredAuthentications publickey
 
 # vim: set syn=sshconfig :
