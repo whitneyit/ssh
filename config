@@ -21,25 +21,25 @@ Host *
 Host bitbucket.org
     ForwardAgent yes
     HostName bitbucket.org
-    User git
     IdentityFile ~/.ssh/james@whitney.io
     PreferredAuthentications publickey
+    User git
 
 Host github.com
     ForwardAgent yes
     HostName github.com
-    User git
     IdentityFile ~/.ssh/james@whitney.io
     PreferredAuthentications publickey
+    User git
 
 # Host github.com
 #     ForwardAgent yes
 #     HostName ssh.github.com
-#     User git
-#     Port 443
-#     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
 #     IdentityFile ~/.ssh/james@whitney.io
+#     Port 443
 #     PreferredAuthentications publickey
+#     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
+#     User git
 
 ###########################################################
 #                                                         #
@@ -50,16 +50,16 @@ Host github.com
 Host forge
     ForwardAgent yes
     HostName 128.199.239.247
-    User forge
     IdentityFile ~/.ssh/james@whitney.io
     PreferredAuthentications publickey
+    User forge
 
 Host homestead
     ForwardAgent yes
     HostName 192.168.99.10
-    User vagrant
-    Port 2000
     IdentityFile ~/.vagrant.d/insecure_private_key
+    Port 2000
     PreferredAuthentications publickey
+    User vagrant
 
 # vim: set syn=sshconfig :
