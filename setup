@@ -92,7 +92,7 @@ if [ -f $HOME/.ssh/config ]; then
     # Create the timestamped backup directory.
     mkdir -p "$BACKUP_DIRECTORY"
 
-    # Test to make sure that our directory was created
+    # Test to make sure that our directory was created.
     if [ ! -d "$BACKUP_DIRECTORY" ]; then
         e_error "Unable to create \"Backup directory\": $BACKUP_DIRECTORY.  Aborting"
         exit 0
@@ -106,41 +106,47 @@ if [ -f $HOME/.ssh/config ]; then
 
 fi
 
-# Read the keys.
-KEYS="$(cat "keys")"
+# If we are running inside a vagrant box we do not need to create any ssh keys
+# because they should already be forwarded from the host box.
+if [ ! -d /home/vagrant ]; then
 
-# Here we loop over each line in the file
-for line in $KEYS;  do
+    # Read the keys.
+    KEYS="$(cat "keys")"
 
-    # Here we convert the line of the file into a real variable
-    key=$(eval echo "$line")
+    # Here we loop over each line in the file.
+    for line in $KEYS;  do
 
-    # See if the key exists
-    if [ -f "$HOME/.ssh/$key" ]; then
+        # Here we convert the line of the file into a real variable.
+        key=$(eval echo "$line")
 
-        # If we are running inside a cygwin box, we need to set the group.
-        if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-            chgrp Users "$HOME/.ssh/$key"
-            chgrp Users "$HOME/.ssh/$key.pub"
+        # See if the key exists.
+        if [ -f "$HOME/.ssh/$key" ]; then
+
+            # If we are running inside a cygwin box, we need to set the group.
+            if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
+                chgrp Users "$HOME/.ssh/$key"
+                chgrp Users "$HOME/.ssh/$key.pub"
+            fi
+
+        # If the $key doesn't exist.
+        else
+
+            # Generate a new key.
+            ssh-keygen -t rsa -C "$key" -f "$HOME/.ssh/$key" -N ""
+            e_info "Created key: $key at $HOME/.ssh/$key"
+
         fi
 
-    # If the $key doesn't exist.
-    else
+        # Set the permissions of the key.
+        chmod 600 "$HOME/.ssh/$key"
+        chmod 600 "$HOME/.ssh/$key.pub"
 
-        # Generate a new key.
-        ssh-keygen -t rsa -C "$key" -f "$HOME/.ssh/$key" -N ""
-        e_info "Created key: $key at $HOME/.ssh/$key"
+        # Add the key to the `ssh-agent`.
+        eval ssh-add "$HOME/.ssh/$key"
 
-    fi
+    done
 
-    # Set the permissions of the key.
-    chmod 600 "$HOME/.ssh/$key"
-    chmod 600 "$HOME/.ssh/$key.pub"
-
-    # Add the key to the `ssh-agent`
-    eval ssh-add "$HOME/.ssh/$key"
-
-done
+fi
 
 # If we are missing a `authorized_keys` file, create one now.
 if [ ! -f $HOME/.ssh/authorized_keys ]; then
