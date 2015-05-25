@@ -180,7 +180,7 @@ if [ -f $HOME/.vagrant.d/insecure_private_key ]; then
     chmod 600 $HOME/.vagrant.d/insecure_private_key
 fi
 
-# Ensure that we have a folder for our soon to be created `ssh-setup` file.
+# Ensure that we have a folder for our soon to be created `ssh_setup` file.
 if [ ! -d /usr/local/bin ]; then
 
     # User sudo if it is available.
@@ -204,22 +204,22 @@ chmod 755 /usr/local/bin
 
 # Here we create a add a method to the users `bin` folder that will be able to
 # automaically call this `setup` file from any directory on the OS. To use the
-# snippet simply run `$ ssh-setup`.
-if [ ! -f /usr/local/bin/ssh-setup ]; then
-    echo "#!/usr/bin/env bash" > /usr/local/bin/ssh-setup
-    echo "cd $PWD"            >> /usr/local/bin/ssh-setup
-    echo "bash setup"         >> /usr/local/bin/ssh-setup
+# snippet simply run `$ ssh_setup`.
+if [ ! -f /usr/local/bin/ssh_setup ]; then
+    echo "#!/usr/bin/env bash" > /usr/local/bin/ssh_setup
+    echo "cd $PWD"            >> /usr/local/bin/ssh_setup
+    echo "bash setup"         >> /usr/local/bin/ssh_setup
 fi
 
-# Ensure that our `ssh-setup` script has the correct group as well.
+# Ensure that our `ssh_setup` script has the correct group as well.
 if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-    chgrp Users /usr/local/bin/ssh-setup
+    chgrp Users /usr/local/bin/ssh_setup
 elif [ -d /home/vagrant ]; then
-    sudo chown vagrant:vagrant /usr/local/bin/ssh-setup
+    sudo chown vagrant:vagrant /usr/local/bin/ssh_setup
 fi
 
 # And set its permissions.
-chmod 755 /usr/local/bin/ssh-setup
+chmod 755 /usr/local/bin/ssh_setup
 
 # With everything now complete, we can "close" the `~/.ssh` folder. The `~/.ssh`
 # folder needs to be 700 and any ssh keys as well as the config file must, be
