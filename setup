@@ -203,7 +203,7 @@ fi
 chmod 755 /usr/local/bin
 
 # Here we create a add a method to the users `bin` folder that will be able to
-# automaically call this `setup` file from any directory on the OS. To use the
+# automatically call this `setup` file from any directory on the OS. To use the
 # snippet simply run `$ ssh_setup`.
 if [ ! -f /usr/local/bin/ssh_setup ]; then
     echo "#!/usr/bin/env bash" > /usr/local/bin/ssh_setup
