@@ -34,6 +34,15 @@ Host github.com
     PreferredAuthentications publickey
     User git
 
+# Host bitbucket.org
+#     ForwardAgent yes
+#     HostName altssh.bitbucket.org
+#     IdentityFile ~/.ssh/james@whitney.io
+#     Port 443
+#     PreferredAuthentications publickey
+#     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
+#     User git
+
 # Host github.com
 #     ForwardAgent yes
 #     HostName ssh.github.com
