@@ -58,13 +58,13 @@ Host github.com
 #                                                         #
 ###########################################################
 
-Host forge
+Host frostwolf.com.au
     ForwardAgent yes
-    HostName 128.199.239.247
-    IdentityFile ~/.ssh/james@whitney.io
+    HostName 188.166.240.219
+    IdentityFile ~/.ssh/james.whitney@frostwolf.io
     Port 22
     PreferredAuthentications publickey
-    User forge
+    User root
 
 Host homestead
     ForwardAgent yes
