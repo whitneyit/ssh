@@ -111,7 +111,7 @@ fi
 if [ ! -d /home/vagrant ]; then
 
     # Read the keys.
-    KEYS="$(cat "keys")"
+    KEYS="$(cat "$HOME/.keys")"
 
     # Here we loop over each line in the file.
     for line in $KEYS;  do
@@ -120,29 +120,29 @@ if [ ! -d /home/vagrant ]; then
         key=$(eval echo "$line")
 
         # See if the key exists.
-        if [ -f "$HOME/.ssh/$key" ]; then
+        if [ -f "$key" ]; then
 
             # If we are running inside a cygwin box, we need to set the group.
             if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-                chgrp Users "$HOME/.ssh/$key"
-                chgrp Users "$HOME/.ssh/$key.pub"
+                chgrp Users "$key"
+                chgrp Users "$key.pub"
             fi
 
         # If the $key doesn't exist.
         else
 
             # Generate a new key.
-            ssh-keygen -t rsa -C "$key" -f "$HOME/.ssh/$key" -N ""
-            e_info "Created key: $key at $HOME/.ssh/$key"
+            ssh-keygen -t rsa -C "$key" -f "$key" -N ""
+            e_info "Created key: $key at $key"
 
         fi
 
         # Set the permissions of the key.
-        chmod 600 "$HOME/.ssh/$key"
-        chmod 600 "$HOME/.ssh/$key.pub"
+        chmod 600 "$key"
+        chmod 600 "$key.pub"
 
         # Add the key to the `ssh-agent`.
-        eval ssh-add "$HOME/.ssh/$key"
+        eval ssh-add "$key"
 
     done
 
