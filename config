@@ -18,7 +18,7 @@ Host *
 #                                                         #
 ###########################################################
 
-Host bitbucket
+Host bitbucket.org
     ForwardAgent yes
     HostName bitbucket.org
     IdentityFile ~/.ssh/james@whitney.io
@@ -26,7 +26,7 @@ Host bitbucket
     PreferredAuthentications publickey
     User git
 
-Host github
+Host github.com
     ForwardAgent yes
     HostName github.com
     IdentityFile ~/.ssh/james@whitney.io
@@ -34,15 +34,29 @@ Host github
     PreferredAuthentications publickey
     User git
 
-Host tempest.github
+###########################################################
+#                                                         #
+#                         ALIASES                         #
+#                                                         #
+###########################################################
+
+Host bitbucket.org__boral
     ForwardAgent yes
-    HostName github.com
-    IdentityFile ~/.ssh/info@tempest.io
+    HostName bitbucket.org
+    IdentityFile ~/.ssh/james.whitney@boral.com.au
     Port 22
     PreferredAuthentications publickey
     User git
 
-# Host bitbucket
+Host github.com__tempest-digital
+    ForwardAgent yes
+    HostName github.com
+    IdentityFile ~/.ssh/github@tempest.io
+    Port 22
+    PreferredAuthentications publickey
+    User git
+
+# Host bitbucket.org__https
 #     ForwardAgent yes
 #     HostName altssh.bitbucket.org
 #     IdentityFile ~/.ssh/james@whitney.io
@@ -51,7 +65,7 @@ Host tempest.github
 #     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
 #     User git
 
-# Host github
+# Host github.com__https
 #     ForwardAgent yes
 #     HostName ssh.github.com
 #     IdentityFile ~/.ssh/james@whitney.io
@@ -59,12 +73,6 @@ Host tempest.github
 #     PreferredAuthentications publickey
 #     ProxyCommand /usr/bin/corkscrew COMPANY_PROXY_HOST COMPANY_PROXY_PORT %h %p
 #     User git
-
-###########################################################
-#                                                         #
-#                         ALIASES                         #
-#                                                         #
-###########################################################
 
 Host homestead
     ForwardAgent yes
