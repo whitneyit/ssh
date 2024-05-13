@@ -67,7 +67,7 @@ fi
 
 # If the `~/.ssh` folder doesn't already exist, create it now.
 if [ ! -d $HOME/.ssh ]; then
-    mkdir $HOME/.ssh
+    mkdir -p $HOME/.ssh
 fi
 
 # Open up the `~/.ssh` folder for editing. We do this outside of the check
@@ -159,17 +159,17 @@ fi
 if [ ! -f $HOME/.ssh/authorized_keys ]; then
     touch $HOME/.ssh/authorized_keys
 fi
-chmod 755 $HOME/.ssh/authorized_keys
+chmod 644 $HOME/.ssh/authorized_keys
 
 # Same goes with `hosts_file` file.
 if [ ! -f $HOME/.ssh/known_hosts ]; then
     touch $HOME/.ssh/known_hosts
 fi
-chmod 755 $HOME/.ssh/known_hosts
+chmod 644 $HOME/.ssh/known_hosts
 
 # Copy over the new `config` file and set its permissions.
 cp config $HOME/.ssh/config
-chmod 755 $HOME/.ssh/config
+chmod 644 $HOME/.ssh/config
 
 # When running in `cygwin`, change the group of the `~/.ssh` folder and all of
 # its children folders and files. More information on why you need to change the
@@ -205,28 +205,6 @@ if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
 elif [ -d /home/vagrant ]; then
     sudo chown vagrant:vagrant /usr/local/bin
 fi
-
-# Reset the folders permissions.
-chmod 755 /usr/local/bin
-
-# Here we create a add a method to the users `bin` folder that will be able to
-# automatically call this `setup` file from any directory on the OS. To use the
-# snippet simply run `$ ssh_setup`.
-if [ ! -f /usr/local/bin/ssh_setup ]; then
-    echo "#!/usr/bin/env bash" > /usr/local/bin/ssh_setup
-    echo "cd $PWD"            >> /usr/local/bin/ssh_setup
-    echo "bash setup"         >> /usr/local/bin/ssh_setup
-fi
-
-# Ensure that our `ssh_setup` script has the correct group as well.
-if [ "$(uname -s | grep -c CYGWIN)" -gt 0 ]; then
-    chgrp Users /usr/local/bin/ssh_setup
-elif [ -d /home/vagrant ]; then
-    sudo chown vagrant:vagrant /usr/local/bin/ssh_setup
-fi
-
-# And set its permissions.
-chmod 755 /usr/local/bin/ssh_setup
 
 # With everything now complete, we can "close" the `~/.ssh` folder. The `~/.ssh`
 # folder needs to be 700 and any ssh keys as well as the config file must, be
