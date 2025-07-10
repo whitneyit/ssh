@@ -124,9 +124,6 @@ if [ ! -d /home/vagrant ]; then
             continue
         fi
 
-        # The full path of the key
-        key="$HOME/.ssh/$key"
-
         # See if the key exists.
         if [ -f "$HOME/.ssh/$key" ]; then
 
